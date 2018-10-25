@@ -1,0 +1,84 @@
+.carousel .slide iframe {
+    width: 100% !important;
+    margin: 0 !important;
+}
+
+.legend {
+    background: none !important;
+    font-size: 150% !important;
+}
+
+.img-fluid {
+  position:relative;
+    left: 6%;
+    width: 80%;
+    height: 80%;
+}
+
+.col-md-4 {
+  position:relative;
+  left: 0
+}
+
+.my-4 {
+  position:relative;
+  left: 4%;
+}
+
+.twitter-timeline{
+   float: right;
+}
+
+.news-card{
+    float: left;
+    margin-left: 2%;
+    margin-right: 2%;
+    width: 20%;
+}
+
+.card-img-top {
+  margin-top: 20px;
+  width: 100%!important;
+  height: 30%!important;
+  object-fit: contain;
+}
+
+#developer-img {
+    height: auto!important;
+    margin-top: 0;
+}
+
+.card-body{
+  object-fit: contain;
+}
+
+body{
+  background-color: #DCDCDC;
+}
+
+.jumbotron{
+  background-color: #cccccc;
+}
+
+.card{
+  background-color: #FFFFFF;
+}
+
+.related-instances > div > div{
+  width: 70%;
+  margin-left: 12%;
+  margin-bottom: 5%
+
+}
+
+.navbar{
+  background-color: #201F1D;
+}
+
+.navbar.sticky-top.navbar-expand-lg.navbar-light{
+  color: #DE8D47;
+}
+
+nav .navbar-nav li a{
+  color: white !important;
+}
