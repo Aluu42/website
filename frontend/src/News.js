@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import NewsCard from './shared-components/NewsCard';
-import {Grid, Row, Col} from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
+import fetch from 'node-fetch';
 import './Paginate.css'
 import Jumbotron from './shared-components/Jumbotron';
 
@@ -19,8 +19,8 @@ class News extends Component{
         });
     }
 
-    componentWillMount() {
-        this.getJSON('https://api.relievepoverty.me/v1/news?page=1').then(response => {
+    async componentWillMount() {
+        await this.getJSON('https://api.relievepoverty.me/v1/news?page=1').then(response => {
             this.setState(JSON.parse(JSON.stringify(response)))
         });
     }
@@ -36,19 +36,19 @@ class News extends Component{
         let pageSize = 12.0;
         return(
             <>
-              <Jumbotron title={"Learn more about poverty in the U.S."} description={"Our news sources include The New York Times, CNN and U.S. News & World Report."}/>
+              <Jumbotron title={"Read Articles About Poverty in the US"} description={"Our news sources include The New York Times, CNN and others."}/>
               <div className='album py-5 bg-light listingPage'>
-                <div class="container">
+                <div className="container">
                   <div className='row'>
                     {this.state.data.map(obj =>
-                      <NewsCard image={obj.image} title={obj.title} description={obj.summary} id={obj.id}/>
+                      <NewsCard image={obj.image} title={obj.title} source={obj.source} id={obj.id} published_date={obj.published_date} state={obj.state} author={obj.author} />
                     )}
                   </div>
                 </div>
                 <ReactPaginate className='pagination'
                   previousLabel={"Previous"}
                   nextLabel={"Next"}
-                  breakLabel={<a href="">...</a>}
+                  breakLabel={<a href="#">...</a>}
                   breakClassName={"break-me"}
                   pageCount={Math.ceil(this.state.total / pageSize)}
                   marginPagesDisplayed={2}

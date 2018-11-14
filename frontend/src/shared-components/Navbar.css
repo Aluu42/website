@@ -1,10 +1,18 @@
 nav.navbar, .navbar-default {
-  background-color: black !important;
+  background-color: #232323 !important;
 }
 .navbar-nav{
     -webkit-flex-direction: row;
     -ms-flex-direction: row;
     flex-direction: row;
+}
+
+.navbar-header {
+    width: 20%
+}
+
+.navbar-brand>img {
+  width: 25%;
 }
 
 .navitem{
@@ -18,9 +26,9 @@ nav.navbar, .navbar-default {
 }
 
 .navbar-default .navbar-nav > li > a {
-  color: white;
+  color: #bcbcbc !important;
 }
 
 .navbar-default .navbar-brand {
-  color: orange;
+  color: #b35c22;
 }

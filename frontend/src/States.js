@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import StatesCard from './shared-components/StatesCard';
 import Jumbotron from './shared-components/Jumbotron';
-import {Grid, Row, Col} from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
+import fetch from 'node-fetch';
 import './Paginate.css'
 
 
@@ -19,8 +19,8 @@ class States extends Component{
         });
     }
 
-    componentWillMount() {
-        this.getJSON('https://api.relievepoverty.me/v1/states?page=1').then(response => {
+    async componentWillMount() {
+        await this.getJSON('https://api.relievepoverty.me/v1/states?page=1').then(response => {
             this.setState(JSON.parse(JSON.stringify(response)))
         });
     }
@@ -36,19 +36,19 @@ class States extends Component{
         let pageSize = 12.0;
         return(
             <>
-              <Jumbotron title={"Learn more about poverty in the U.S."} description={"Learn more about poverty for each state."}/>
+              <Jumbotron title={"Learn More About Poverty by State in the U.S."} description={"Facts and figures of poverty in all 50 states"}/>
               <div className='album py-5 bg-light listingPage'>
-                <div class="container">
+                <div className="container">
                   <div className='row'>
                     {this.state.data.map(obj =>
-                      <StatesCard image={obj.flag} state={obj.name} rank={obj.rank}/>
+                      <StatesCard image={obj.flag} state={obj.name} rank={obj.rank} median_income={obj.median_income} counties={obj.counties} child_poverty_rate={obj.child_poverty_rate} below_poverty_rate={obj.below_poverty_rate}/>
                     )}
                   </div>
                 </div>
                 <ReactPaginate className='pagination'
                   previousLabel={"Previous"}
                   nextLabel={"Next"}
-                  breakLabel={<a href="">...</a>}
+                  breakLabel={<a href="#">...</a>}
                   breakClassName={"break-me"}
                   pageCount={Math.ceil(this.state.total / pageSize)}
                   marginPagesDisplayed={2}

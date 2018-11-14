@@ -2,41 +2,22 @@ import React, { Component } from 'react';
 import AboutCard from './shared-components/AboutCard';
 import Jumbotron from './shared-components/Jumbotron';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { getTeam } from './TeamInfo.js';
+import fetch from 'node-fetch';
 
 class About extends Component{
 
 	constructor (props) {
     	super(props);
-
     	this.state = {
-    		commits: {
-    			albert: 0,
-    			colin: 0,
-    			daniel: 0,
-    			evan: 0,
-    			uri: 0,
-    			yoav: 0,
-    			total: 0
-    		},
-    		issues: {
-    			albert: 0,
-    			colin: 0,
-    			daniel: 0,
-    			evan: 0,
-    			uri: 0,
-    			yoav: 0,
-    			total: 0
-    		},
-    		tests: {
-    			albert: 0,
-    			colin: 0,
-    			daniel: 0,
-    			evan: 0,
-    			uri: 0,
-    			yoav: 0,
-    			total: 0
+    		team: getTeam(),
+    		total: {
+    			commits: 0,
+    			issues: 0,
+					tests: 0,
+					acceptance_tests: 0,
     		}
-       }
+    	};
    }
 
 	/**
@@ -46,6 +27,7 @@ class About extends Component{
 		this.getCommits();
 		this.getIssues();
 		this.getTests();
+		this.getAcceptanceTests();
 	}
 
     render(){
@@ -53,46 +35,55 @@ class About extends Component{
     		<>
 			<Jumbotron title={'About Our Site'} description={'Our mission is to educate citizens of the United States about the issues concerning poverty within the country by providing articles and information about it in each state. We then provide information about charities that readers can donate to in order to help fight against poverty. An interesting result of integrating articles, charities, and state statistics concerning poverty is that we were able to make a connection between them even though they were previously three distinct mediums.'}/>
 			<main role="main">
-		      <div class="album py-5">
-		        <div class="container">
-		          <div class="card mb-4 box-shadow">
-		            <div class="card-body">
-		              <h4 class="card-title" styles="margin-bottom: 0">Stats</h4>
+		      <div className="album py-5">
+		        <div className="container">
+		          <div className="card mb-4 box-shadow">
+		            <div className="card-body">
+		              <h4 className="card-title about-card-title" styles="margin-bottom: 0">Stats</h4>
 		            </div>
-		            <ul class="list-group list-group-flush">
-		              <li class="list-group-item">Total # of commits: {this.state.commits.total}</li>
-		              <li class="list-group-item">Total # of issues: {this.state.issues.total}</li>
-		              <li class="list-group-item">Total # of unit tests: {this.state.tests.total}</li>
+		            <ul className="list-group list-group-flush">
+		              <li className="list-group-item">Total # of commits: {this.state.total.commits}</li>
+		              <li className="list-group-item">Total # of issues: {this.state.total.issues}</li>
+		              <li className="list-group-item">Total # of unit tests: {this.state.total.tests}</li>
+									<li className="list-group-item">Total # of acceptance tests: {this.state.total.acceptance_tests}</li>
 		            </ul>
 		          </div>
-			    	<div class="row">
-				    	<AboutCard image={require('./img/uri.jpg')} name={'Uriel Kugelmass'} title={'Frontend Developer'} description={'Uriel is currently a Computer Science Senior at UT from Montevideo, Uruguay. Outside of school, you can find him playing soccer or reading books, but never taking long walks on the beach.'} commits={this.state.commits.uri} issues={this.state.issues.uri} tests={this.state.tests.uri}/>
-				    	<AboutCard image={require('./img/evan.jpg')} name={'Evan Weiss'} title={'APIs, Backend, and Databases'} description={"Evan is a Junior at UT studying Computer Science and was born in Dallas, TX. A fun fact about him is that he has been skydiving. He doesn't enjoy long walks on the beach because he gets bored easily."} commits={this.state.commits.evan} issues={this.state.issues.evan} tests={this.state.tests.evan}/>
-				    	<AboutCard image={require('./img/yoav.jpg')} name={'Yoav Ilan'} title={'Frontend Developer'} description={'Yoav is a Junior Computer Science student from Dallas, TX, and Israel prior to that. He only enjoys medium walks on the beach that are between 10 to 15 minutes inclusive.'} commits={this.state.commits.yoav} issues={this.state.issues.yoav} tests={this.state.tests.yoav}/>
-				    	<AboutCard image={require('./img/albert.jpg')} name={'Albert Luu'} title={'Full-Stack Developer'} description={'Albert is a Junior Computer Science student from Arlington, Texas. Outside of school, he enjoys biking, gaming, and playing piano. Unfortunately, long walks on the beach are very tiring to him.'} commits={this.state.commits.albert} issues={this.state.issues.albert} tests={this.state.tests.albert}/>
-				    	<AboutCard image={require('./img/colin.jpg')} name={'Colin Frick'} title={'Full-Stack Developer'} description={'Colin is a Junior Computer Science student at UT from Houston Texas. He is interested in studying artificial intelligence and web development. He does not enjoy walking of any form.'} commits={this.state.commits.colin} issues={this.state.issues.colin} tests={this.state.tests.colin}/>
-				    	<AboutCard image={require('./img/daniel.jpg')} name={'Daniel Chruscielski'} title={'Full-Stack Developer'} description={'Daniel is a third year Computer Science student at UT. He enjoys making long walks on the beach shorter by finding the shortest possible path. In his spare time, he plays the drums, listens to jazz, and generally does what you would expect from someone who lives in Austin.'} commits={this.state.commits.daniel} issues={this.state.issues.daniel} tests={this.state.tests.daniel}/>
+			    	<div className="row">
+			    	    {this.state.team.map(obj => <AboutCard data={obj}/> )}
 			    	</div>
-		          <div class="card mb-4 box-shadow">
-		            <div class="card-body">
-		              <h4 class="card-title" styles="margin-bottom: 0">Data Sources</h4>
+		          <div className="card mb-4 box-shadow">
+		            <div className="card-body">
+		              <h4 className="card-title about-card-title" styles="margin-bottom: 0">Data Sources</h4>
 		            </div>
-		            <ul class="list-group list-group-flush">
-		              <li class="list-group-item"><a href="https://en.wikipedia.org/wiki/List_of_U.S._states_and_territories_by_poverty_rate" target="_blank">Wikipedia (State Poverty)</a> - Scraped by using Wikipedia's REST API then parsing the data tables</li>
-		              <li class="list-group-item"><a href="https://developer.nytimes.com/article_search_v2.json" target="_blank">NYTimes</a> - Scraped by using their article search API with queries</li>
-		              <li class="list-group-item"><a href="https://newsapi.org/" target="_blank">NewsAPI</a> - Scraped by using their API with states as filters</li>
-		              <li class="list-group-item"><a href="https://charity.3scale.net/docs/data-api/reference" target="_blank">Charity Navigator</a> - Scraped by using their API by searching for poverty related charities</li>
+		            <ul className="list-group list-group-flush">
+		              <li className="list-group-item"><a href="https://www.census.gov/programs-surveys/saipe/data/api.html" target="_blank" rel="noopener noreferrer">US Census Bureau (State Poverty)</a> - Used The US Census Bureau''s restful SAIPE API to find information on poverty rates by state </li>
+		              <li className="list-group-item"><a href="https://newsapi.org/" target="_blank" rel="noopener noreferrer">NewsAPI</a> - Scraped by using their API with states as filters</li>
+		              <li className="list-group-item"><a href="https://charity.3scale.net/docs/data-api/reference" target="_blank" rel="noopener noreferrer">Charity Navigator</a> - Scraped by using their API by searching for poverty related charities</li>
+									<li className="list-group-item"><a href="https://clearbit.com/logo" target="_blank" rel="noopener noreferrer">Clearbit</a> - Used the API on clearbit to retrieve images from charity websites</li>
+									<li className="list-group-item"><a href="http://www.theus50.com/" target="_blank" rel="noopener noreferrer">The US50</a> - Retrieved images of all 50 state flags from URL of this website</li>
+									<li className="list-group-item"><a href="https://createaclickablemap.com/" target="_blank" rel="noopener noreferrer">Create a Clickable Map</a> - Placed a clickable US map on the home page of this wesite</li>
+									<li className="list-group-item"><a href="https://developers.google.com/maps/documentation/" target="_blank" rel="noopener noreferrer">Google Maps API</a> - Used to place maps in instance pages</li>
+
+
+
 		            </ul>
 		          </div>
-		          <div class="card mb-4 box-shadow">
-		            <div class="card-body">
-		              <h4 class="card-title" styles="margin-bottom: 0">Tools</h4>
+		          <div className="card mb-4 box-shadow">
+		            <div className="card-body">
+		              <h4 className="card-title about-card-title" styles="margin-bottom: 0">Tools</h4>
 		            </div>
-		            <ul class="list-group list-group-flush">
-		              <li class="list-group-item"><a href="https://gitlab.com/urielkugelmass/relievepoverty" target="_blank">Gitlab</a> - Used for version control, continuous integration, and issue/story tracking</li>
-		              <li class="list-group-item"><a href="https://documenter.getpostman.com/view/5460449/RWgjY1qy" target="_blank">Postman</a> - Used for API design and unit testing</li>
-		              <li class="list-group-item"><a href="https://aws.amazon.com/" target="_blank">AWS</a> - Used to host our webapp, backend, and database</li>
-		              <li class="list-group-item"><a href="http://getbootstrap.com/" target="_blank">Bootstrap</a> - An open source toolkit for CSS elements</li>
+		            <ul className="list-group list-group-flush">
+		              <li className="list-group-item"><a href="https://gitlab.com/urielkugelmass/relievepoverty" target="_blank" rel="noopener noreferrer">Gitlab</a> - Used for version control, continuous integration, and issue/story tracking</li>
+		              <li className="list-group-item"><a href="https://documenter.getpostman.com/view/5460449/RWgjY1qy" target="_blank" rel="noopener noreferrer">Postman</a> - Used for API design and unit testing</li>
+		              <li className="list-group-item"><a href="https://aws.amazon.com/" target="_blank" rel="noopener noreferrer">AWS</a> - Used to host our webapp, backend, and database.</li>
+		              <li className="list-group-item"><a href="http://getbootstrap.com/" target="_blank" rel="noopener noreferrer">Bootstrap</a> - An open source toolkit for CSS elements.</li>
+		              <li className="list-group-item"><a href="https://reactjs.org/" target="_blank" rel="noopener noreferrer">ReactJS</a> - ReactJS is our front-end JavaScript framework. It focuses on components makes it easier for distributed, collaborative work. It also renders out site from API data.</li>
+		              <li className="list-group-item"><a href="http://flask.pocoo.org/" target="_blank" rel="noopener noreferrer">Flask</a> - Flask is a web framework used on the site.</li>
+		              <li className="list-group-item"><a href="https://mochajs.org/" target="_blank" rel="noopener noreferrer">Mocha</a> - Mocha is a JavaScript testing framework.</li>
+		              <li className="list-group-item"><a href="https://www.seleniumhq.org/" target="_blank" rel="noopener noreferrer">Selenium</a> - Selenium is a framework that allows browser navigation automation.</li>
+		              <li className="list-group-item"><a href="https://docs.python.org/2/library/unittest.html" target="_blank" rel="noopener noreferrer">Unittest</a> - Python framework that allows creation of unit tests.</li>
+		              <li className="list-group-item"><a href="http://plantuml.com/" target="_blank" rel="noopener noreferrer">PlantUML</a> - Program that allows you to see relationship between classes and their attributes.</li>
+		              <li className="list-group-item"><a href="https://www.grammarly.com/" target="_blank" rel="noopener noreferrer">Grammarly</a> - Grammarly is a plugin that checks for grammar mistakes.</li>
 		            </ul>
 		          </div>
 		        </div>
@@ -101,7 +92,7 @@ class About extends Component{
     		</>
     	)
 	}
-
+    
 	/**
  	 * Wrapper to get JSON from an external API
  	 */
@@ -112,79 +103,98 @@ class About extends Component{
 	}
 
 	/**
- 	 * Loads commits from gitlabs, parses the json, then binds the variables to the HTML
+ 	 * Loads commits from gitlabs, parses the json, then updates the prop
  	 */
 	getCommits() {
 		var url = 'https://gitlab.com/api/v4/projects/8594442/repository/contributors?sort=desc';
-		var albert_commits = 0;
-		var colin_commits = 0;
-		var daniel_commits = 0;
-		var evan_commits = 0;
-		var uri_commits = 0;
-		var yoav_commits = 0;
-		var total_commits = 0;
-
 		this.getJSON(url).then(response => {
-			JSON.parse(JSON.stringify(response)).forEach(obj => {
-				total_commits += obj.commits;
-				if (obj.name == 'Albert Luu') {
-					albert_commits = obj.commits;
-				} 
-				else if (obj.name == 'cfrick16') {
-					colin_commits += obj.commits;
-				} 
-				else if (obj.name == 'Daniel Chruscielski') {
-					daniel_commits += obj.commits;
-				} 
-				else if (obj.name == 'Evan Weiss' || obj.name == 'eweiss97') {
-					evan_commits += obj.commits;
-				} 
-				else if (obj.name == 'Uriel Kugelmass') {
-					uri_commits += obj.commits;
-				} 
-				else if (obj.name == 'Yoav Ilan') {
-					yoav_commits += obj.commits;
-				}
+			var members = this.state.team;
+			var stats = this.state.total;
+			members.forEach(member => {
+				JSON.parse(JSON.stringify(response)).forEach(obj => {
+					if (member.commit_ids.includes(obj.name)) {
+						member.commits += obj.commits;
+					}
+				});
+				stats.commits += member.commits;
 			});
-			const obj = {albert: albert_commits, colin: colin_commits, daniel: daniel_commits, evan: evan_commits, uri: uri_commits, yoav: yoav_commits, total: total_commits};
-			this.setState({commits: obj, issues: this.state.issues, tests: this.state.tests});
+			this.setState({team: members, total: stats});
 		}).catch(err => {
 			console.log('getCommits FAILED');
 		});
 	}
 
 	/**
- 	 * Sends individual issue API Gets for each contributor in parallel, parses the data, then binds it to the HTML
+ 	 * Sends individual issue API Gets for each contributor in parallel, parses the data, then updates the prop
  	 */
 	getIssues() {
-		var albert_url = 'https://gitlab.com/api/v4/projects/8594442/issues?author_id=2803538&per_page=100';
-		var colin_url = 'https://gitlab.com/api/v4/projects/8594442/issues?author_id=2776165&per_page=100';
-		var daniel_url = 'https://gitlab.com/api/v4/projects/8594442/issues?author_id=2773160&per_page=100';
-		var evan_url = 'https://gitlab.com/api/v4/projects/8594442/issues?author_id=2773618&per_page=100';
-		var uri_url = 'https://gitlab.com/api/v4/projects/8594442/issues?author_id=2825936&per_page=100';
-		var yoav_url = 'https://gitlab.com/api/v4/projects/8594442/issues?author_id=2788669&per_page=100';
-
-		Promise.all([this.getJSON(albert_url), this.getJSON(colin_url), this.getJSON(daniel_url), this.getJSON(evan_url), this.getJSON(uri_url), this.getJSON(yoav_url)])
-		.then(([albert, colin, daniel, evan, uri, yoav]) => {
-			var albert_issues = JSON.parse(JSON.stringify(albert)).length
-			var colin_issues = JSON.parse(JSON.stringify(colin)).length
-			var daniel_issues = JSON.parse(JSON.stringify(daniel)).length
-			var evan_issues = JSON.parse(JSON.stringify(evan)).length
-			var uri_issues = JSON.parse(JSON.stringify(uri)).length
-			var yoav_issues = JSON.parse(JSON.stringify(yoav)).length
-			const total = albert_issues + colin_issues + daniel_issues + evan_issues + uri_issues + yoav_issues;
-			const obj = {albert: albert_issues, colin: colin_issues, daniel: daniel_issues, evan: evan_issues, uri: uri_issues, yoav: yoav_issues, total: total};
-			this.setState({commits: this.state.commits, issues: obj, tests: this.state.tests});
-		}); 
+		var urls = [];
+		this.state.team.map(member => urls.push('https://gitlab.com/api/v4/projects/8594442/issues?author_id=' + member.issue_id + '&per_page=100'));
+		var promises = urls.map(url => this.getJSON(url));
+		var responses = new Array(urls.length);
+		Promise.all(promises)
+		.then((responses) => {
+			var members = this.state.team;
+			var stats = this.state.total;
+			var counter = 0;
+			responses.map(resp => {
+				stats.issues += JSON.parse(JSON.stringify(resp)).length;
+				members[counter].issues = JSON.parse(JSON.stringify(resp)).length;
+				counter++;
+			});
+			this.setState({team: members, total: stats});
+		}).catch(err => {
+			console.log('getIssues FAILED');
+		});
 	}
 
 	/**
- 	 * We weren't able to find documentation for unit tests. Since we won't be making any
- 	 * for the first project anyways we have decided to just hardcode them as zero
+ 	 * Fetches the tests from gitlab then parses comments for tests, then updates the prop
  	 */
 	getTests() {
-		const obj = {albert: 0, colin: 0, daniel: 0, evan: 0, uri: 0, yoav: 0, total: 0};
-		this.setState({commits: this.state.commits, issues: this.state.issues, tests: obj});
+		var proxy = 'https://cors-anywhere.herokuapp.com/';
+		var urls = ['https://gitlab.com/urielkugelmass/relievepoverty/raw/development/Postman.json',
+		            'https://gitlab.com/urielkugelmass/relievepoverty/raw/development/frontend/test.js',
+		            'https://gitlab.com/urielkugelmass/relievepoverty/raw/development/backend/tests/test_charities_api.py',
+		            'https://gitlab.com/urielkugelmass/relievepoverty/raw/development/backend/tests/test_states_api.py',
+		            'https://gitlab.com/urielkugelmass/relievepoverty/raw/development/backend/tests/test_news_api.py'];
+		var promises = urls.map(url =>fetch(proxy + url).then(resp => resp.text()));
+		var responses = new Array(urls.length);
+		Promise.all(promises)
+		.then((responses) => {
+			var members = this.state.team;
+			var stats = this.state.total;
+			members.forEach(member => {
+				responses.map(resp => {
+					member.tests += (resp.split(member.tests_id).length - 1);
+				});
+				stats.tests += member.tests;
+			});
+			this.setState({team: members, total: stats});
+		}).catch(err => {
+			console.log('getTests FAILED');
+		}); ;
+	}
+
+	getAcceptanceTests() {
+		var proxy = 'https://cors-anywhere.herokuapp.com/';
+		var urls = ['https://gitlab.com/urielkugelmass/relievepoverty/raw/development/tst/e2e/test.py'];
+		var promises = urls.map(url =>fetch(proxy + url).then(resp => resp.text()));
+		var responses = new Array(urls.length);
+		Promise.all(promises)
+		.then((responses) => {
+			var members = this.state.team;
+			var stats = this.state.total;
+			members.forEach(member => {
+				responses.map(resp => {
+					member.acceptance_tests += (resp.split(member.tests_id).length - 1);
+				});
+				stats.acceptance_tests += member.acceptance_tests;
+			});
+			this.setState({team: members, total: stats});
+		}).catch(err => {
+			console.log('getTests FAILED');
+		}); ;
 	}
 }
 

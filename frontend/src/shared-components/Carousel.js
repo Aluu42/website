@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Carousel } from "react-responsive-carousel";
 import "./styles.css";
+import {Link} from 'react-router-dom'
+
 const usMap = {
     height: '100%',
     width: '100%',
@@ -13,16 +15,25 @@ class CustomCarousel extends Component {
         <div>
         <Carousel showThumbs={false} showStatus={false}>
         <div style = {usMap}>
-          <iframe src="https://createaclickablemap.com/map.php?&id=75610&maplocation=false&online=true" height="100%" width="100%"></iframe>
-          <p className="legend">States</p>
+          <iframe title="map" src="https://createaclickablemap.com/map.php?&id=75691&maplocation=false&online=true" height="100%" width="100%"></iframe>
+            <p className="legend">
+            <Link to="/states">States</Link>
+            </p>
         </div>
         <div>
+          <Link to="/charities">
           <img className="d-block w-100" src={require('./../img/Charities.jpg')} alt="Second slide"/>
-          <p className="legend">Charities</p>
+          </Link>
+          <p className="legend">
+          <Link to="/charities">Charities</Link>
+          </p>
         </div>
         <div>
-          <img className="d-block w-100" src={require('./../img/News.jpeg')} alt="Third slide"/>
-          <p className="legend">News</p>
+          <Link to="/news"><img className="d-block w-100" src={require('./../img/News.jpeg')} alt="Third slide"/>
+          </Link>
+          <p className="legend">
+          <Link to="/news">News</Link>
+          </p>
         </div>
       </Carousel>
       </div>

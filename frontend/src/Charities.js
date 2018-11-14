@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import CharitiesCard from './shared-components/CharitiesCard';
 import Jumbotron from './shared-components/Jumbotron';
-import {Grid, Row, Col} from 'react-bootstrap';
 import ReactPaginate from 'react-paginate';
+import fetch from 'node-fetch';
 import './Paginate.css'
 
 
@@ -19,8 +19,8 @@ class Charities extends Component{
         });
     }
 
-    componentWillMount() {
-        this.getJSON('https://api.relievepoverty.me/v1/charities?page=1').then(response => {
+    async componentWillMount() {
+        await this.getJSON('https://api.relievepoverty.me/v1/charities?page=1').then(response => {
             this.setState(JSON.parse(JSON.stringify(response)))
         });
     }
@@ -36,19 +36,19 @@ class Charities extends Component{
         let pageSize = 12.0;
         return(
             <>
-              <Jumbotron title={"Learn more about poverty in the U.S."} description={"Charities throughout the US are doing amazing work every single day to combat poverty. Help them accomplish their goals by donating today."}/>
+              <Jumbotron title={"Search for Charities that Help to Relieve Poverty in the US"} description={"Charities throughout the US are doing great work every single day to combat poverty. Help them accomplish their goals by donating today."}/>
               <div className='album py-5 bg-light listingPage'>
-                <div class="container">
+                <div className="container">
                   <div className='row'>
                     {this.state.data.map(obj =>
-                      <CharitiesCard image={obj.img} title={obj.name} description={obj.mission} id={obj.id}/>
+                      <CharitiesCard image={obj.img} title={obj.name} affiliation={obj.affiliation} tax_classification={obj.tax_classification} state={obj.state} rating={obj.rating} id={obj.id}/>
                     )}
                   </div>
                 </div>
                 <ReactPaginate className='pagination'
                   previousLabel={"Previous"}
                   nextLabel={"Next"}
-                  breakLabel={<a href="">...</a>}
+                  breakLabel={<a href="#">...</a>}
                   breakClassName={"break-me"}
                   pageCount={Math.ceil(this.state.total / pageSize)}
                   marginPagesDisplayed={2}
